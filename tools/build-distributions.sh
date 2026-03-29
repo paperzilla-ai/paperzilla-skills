@@ -34,6 +34,8 @@ for skill_dir in "$SRC"/*; do
       exit 1
     fi
 
+    version="$(awk -F': *' '/^version:/{print $2; exit}' "$frontmatter" | tr -d '"' | tr -d "'" || true)"
+
     out="$DIST/$skill/$target/$skill"
     mkdir -p "$out"
 
@@ -58,12 +60,16 @@ for skill_dir in "$SRC"/*; do
     if [ "$target" = "openclaw" ]; then
       OPENCLAW_ROWS+=("| $skill | openclaw | clawhub install paperzilla |")
     else
-      zip_path="$DIST/${skill}-${target}.zip"
+      zip_name="${skill}-${target}.zip"
+      if [ -n "$version" ]; then
+        zip_name="${skill}-${target}-v${version}.zip"
+      fi
+      zip_path="$DIST/$zip_name"
       (
         cd "$DIST/$skill/$target"
         zip -qr "$zip_path" "$skill"
       )
-      ZIP_ROWS+=("| $skill | $target | [${skill}-${target}.zip](../dist/${skill}-${target}.zip) |")
+      ZIP_ROWS+=("| $skill | $target | [$zip_name](../dist/$zip_name) |")
     fi
   done
 done
