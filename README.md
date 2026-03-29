@@ -1,58 +1,54 @@
 # Paperzilla Skills
 
-Single source-of-truth repo for Paperzilla agent skills.
+Official skill packages for using **Paperzilla** from AI agents.
 
-Goals:
-- **DRY for maintainers**: one canonical skill body, thin per-agent overlays
-- **Easy for users**: direct ZIP downloads per target where needed
+These skills let agents use the `pz` CLI to:
+- list projects
+- browse project feeds
+- inspect paper/feed-item details
+- export JSON output
+- generate Atom feed URLs
 
-## Repository layout
+## Get the latest skills
 
-```text
-src/
-  <skill-name>/
-    base/
-      BODY.md                 # canonical skill instructions (shared)
-      references/             # optional shared docs
-      scripts/                # optional shared scripts
-      assets/                 # optional shared assets
-    overlays/
-      generic/frontmatter.yml
-      claude/frontmatter.yml
-      codex/frontmatter.yml
-      openclaw/frontmatter.yml
-      <target>/files/...      # optional target-specific files
+### OpenClaw (recommended install path)
+Install from ClawHub (not ZIP):
 
-tools/
-  build-distributions.sh      # generates SKILL.md + ZIP artifacts
-
-dist/                         # generated artifacts
-catalog/
-  downloads.md                # generated install/download index
-```
-
-## Build distributions
-
-```bash
-./tools/build-distributions.sh
-```
-
-This generates:
-- `dist/<skill>-<target>.zip` for non-OpenClaw targets
-- `dist/<skill>/<target>/<skill>/SKILL.md` assembled from frontmatter + shared body
-- `catalog/downloads.md` index
-
-## OpenClaw distribution
-
-For OpenClaw, prefer **ClawHub install** over ZIP download:
+- Skill page: https://clawhub.ai/pors/paperzilla
+- Install command:
 
 ```bash
 clawhub install paperzilla
 ```
 
-Published skill page:
-- https://clawhub.ai/pors/paperzilla
+### Other agents (ZIP packages)
+Download from the latest GitHub release assets:
 
-## Current skills
+- https://github.com/paperzilla-ai/paperzilla-skills/releases/latest
 
-- `paperzilla-cli`
+## Skill matrix
+
+| Skill type | OpenClaw | Claude | Codex | Generic |
+|---|---|---|---|---|
+| `paperzilla-cli` | ClawHub package: `paperzilla` | ZIP: `paperzilla-cli-claude.zip` | ZIP: `paperzilla-cli-codex.zip` | ZIP: `paperzilla-cli-generic-vX.Y.Z.zip` |
+
+**Versioning:** the Generic ZIP version matches the OpenClaw skill version (example: `0.2.0`).
+
+## Prerequisites
+
+- Install `pz`: https://docs.paperzilla.ai/guides/cli
+- Authenticate once:
+
+```bash
+pz login
+```
+
+## Reference links
+
+- Paperzilla CLI docs: https://docs.paperzilla.ai/guides/cli
+- CLI quickstart: https://docs.paperzilla.ai/guides/cli-getting-started
+- CLI repo: https://github.com/paperzilla-ai/pz
+
+## Security
+
+Only install skills from trusted sources and review packaged files before using them in sensitive environments.
