@@ -1,26 +1,58 @@
-# Paperzilla OpenClaw Skill
+# Paperzilla Skills
 
-This repo contains the `paperzilla` OpenClaw skill (`SKILL.md`) used by agents to interact with the Paperzilla CLI (`pz`).
+Single source-of-truth repo for Paperzilla agent skills.
 
-It helps agents:
-- list projects
-- browse project feeds
-- inspect paper/feed-item details
-- export JSON output for automation
-- generate Atom feed URLs
+Goals:
+- **DRY for maintainers**: one canonical skill body, thin per-agent overlays
+- **Easy for users**: direct ZIP downloads per target where needed
 
-## Requirements
+## Repository layout
 
-- `pz` installed on the machine
-- authenticated session via `pz login`
+```text
+src/
+  <skill-name>/
+    base/
+      BODY.md                 # canonical skill instructions (shared)
+      references/             # optional shared docs
+      scripts/                # optional shared scripts
+      assets/                 # optional shared assets
+    overlays/
+      generic/frontmatter.yml
+      claude/frontmatter.yml
+      codex/frontmatter.yml
+      openclaw/frontmatter.yml
+      <target>/files/...      # optional target-specific files
 
-## ClawHub
+tools/
+  build-distributions.sh      # generates SKILL.md + ZIP artifacts
 
-Install from ClawHub:
+dist/                         # generated artifacts
+catalog/
+  downloads.md                # generated install/download index
+```
 
+## Build distributions
+
+```bash
+./tools/build-distributions.sh
+```
+
+This generates:
+- `dist/<skill>-<target>.zip` for non-OpenClaw targets
+- `dist/<skill>/<target>/<skill>/SKILL.md` assembled from frontmatter + shared body
+- `catalog/downloads.md` index
+
+## OpenClaw distribution
+
+For OpenClaw, prefer **ClawHub install** over ZIP download:
+
+```bash
+clawhub install paperzilla
+```
+
+Published skill page:
 - https://clawhub.ai/pors/paperzilla
 
-## Related links
+## Current skills
 
-- Paperzilla CLI docs: https://docs.paperzilla.ai/guides/cli
-- Paperzilla CLI repo: https://github.com/paperzilla-ai/pz
+- `paperzilla-cli`

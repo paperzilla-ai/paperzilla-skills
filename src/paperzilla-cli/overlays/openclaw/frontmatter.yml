@@ -1,0 +1,9 @@
+name: paperzilla
+description: Use the Paperzilla CLI (pz) to browse research projects/feeds, inspect papers, export JSON, and generate Atom feed URLs. Trigger when users ask to check Paperzilla feeds, list projects, inspect paper details, or automate feed workflows.
+version: 0.2.0
+metadata:
+  openclaw:
+    requires:
+      bins:
+        - pz
+    homepage: https://docs.paperzilla.ai/guides/cli
