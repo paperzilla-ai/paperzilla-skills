@@ -1,2 +1,0 @@
-name: paperzilla-cli
-description: Use the Paperzilla CLI (pz) to browse research projects/feeds, inspect papers, export JSON, and generate Atom feed URLs. Trigger when users ask to check Paperzilla feeds, list projects, inspect paper details, or automate feed workflows.

@@ -1,7 +1,7 @@
 ---
 name: paperzilla
-description: Use the Paperzilla CLI (pz) to browse research projects/feeds, inspect papers, export JSON, and generate Atom feed URLs. Trigger when users ask to check Paperzilla feeds, list projects, inspect paper details, or automate feed workflows.
-version: 1.1.0
+description: Chat with your agent about projects and papers in Paperzilla. Use when users ask for recent papers from a project, want a paper as markdown, need a summary, want relevance to their research, inspect feeds, export JSON, or get Atom feed URLs.
+version: 0.2.1
 metadata:
   openclaw:
     requires:
@@ -10,9 +10,25 @@ metadata:
     homepage: https://docs.paperzilla.ai/guides/cli
 ---
 
-# Paperzilla CLI (`pz`) 🦖
+# Paperzilla
 
-Use `pz` to work with Paperzilla projects and paper feeds from the terminal.
+Use this skill when you want to chat with your agent about projects and papers in Paperzilla.
+
+## What you can ask
+
+- "Give me the latest papers from project X."
+- "Fetch paper Y as markdown and summarize it."
+- "Tell me how this paper is relevant to my research."
+- "Show me the feed for project X."
+- "Export this paper or feed as JSON."
+
+This is the core Paperzilla skill. It gives your agent direct access to Paperzilla data, but it does not impose a workflow or external delivery integration.
+
+## Access method
+
+Most current profiles in this repo use the `pz` CLI.
+
+If the current profile ships extra agent-specific instructions, follow those as well.
 
 ## Install
 
@@ -73,7 +89,9 @@ sudo mv pz /usr/local/bin/
 pz login
 ```
 
-## Core commands
+## CLI reference
+
+If the current profile uses `pz`, these are the core commands.
 
 ### List projects
 ```bash

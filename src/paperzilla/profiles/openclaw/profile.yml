@@ -1,0 +1,9 @@
+id: openclaw
+agent: openclaw
+transport: cli
+package_type: openclaw
+install_command: clawhub install paperzilla
+version: 0.2.1
+requires_bins: pz
+homepage: https://docs.paperzilla.ai/guides/cli
+sync_repo_root_skill: true

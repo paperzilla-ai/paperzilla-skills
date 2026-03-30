@@ -1,7 +1,22 @@
+# Paperzilla
 
-# Paperzilla CLI (`pz`) 🦖
+Use this skill when you want to chat with your agent about projects and papers in Paperzilla.
 
-Use `pz` to work with Paperzilla projects and paper feeds from the terminal.
+## What you can ask
+
+- "Give me the latest papers from project X."
+- "Fetch paper Y as markdown and summarize it."
+- "Tell me how this paper is relevant to my research."
+- "Show me the feed for project X."
+- "Export this paper or feed as JSON."
+
+This is the core Paperzilla skill. It gives your agent direct access to Paperzilla data, but it does not impose a workflow or external delivery integration.
+
+## Access method
+
+Most current profiles in this repo use the `pz` CLI.
+
+If the current profile ships extra agent-specific instructions, follow those as well.
 
 ## Install
 
@@ -62,7 +77,9 @@ sudo mv pz /usr/local/bin/
 pz login
 ```
 
-## Core commands
+## CLI reference
+
+If the current profile uses `pz`, these are the core commands.
 
 ### List projects
 ```bash

@@ -1,0 +1,6 @@
+id: claude
+agent: claude
+transport: cli
+package_type: zip
+artifact_name: paperzilla-claude
+version: 0.2.1

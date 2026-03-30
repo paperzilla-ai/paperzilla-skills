@@ -1,0 +1,10 @@
+id: paperzilla-monitor
+name: Paperzilla Monitor
+package_root: paperzilla-monitor
+category: workflow
+summary: Triage new papers from a Paperzilla project feed and produce a digest.
+frontmatter_name: paperzilla-monitor
+frontmatter_description: Monitor and triage Paperzilla project feeds. Use when users ask what is new, want relevance triage, need paper markdown summaries, or want a digest workflow.
+profiles:
+  - claude
+  - openclaw

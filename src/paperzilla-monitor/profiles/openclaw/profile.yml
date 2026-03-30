@@ -1,0 +1,6 @@
+id: openclaw
+agent: openclaw
+transport: cli
+package_type: source
+version: 0.2.1
+source_note: source-only profile in this repo

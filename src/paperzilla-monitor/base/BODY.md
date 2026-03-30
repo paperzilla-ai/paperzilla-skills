@@ -1,6 +1,6 @@
 # Paperzilla Research Monitor
 
-Monitor and triage papers from Paperzilla projects using the `pz` CLI.
+Monitor and triage papers from Paperzilla projects using the Paperzilla access method provided by the current profile.
 
 ## Scope
 
@@ -12,10 +12,22 @@ Use this skill when the user asks to:
 
 ## Prerequisites
 
-- `pz` is installed and authenticated (`pz login`).
-- Run `which pz` before first use in a session if unsure.
+- Use the Paperzilla transport required by the current profile.
+- For CLI profiles, `pz` must be installed and authenticated (`pz login`).
+- For MCP profiles, the Paperzilla MCP must be available to the agent.
 
-## Core CLI Commands
+## Access method
+
+This workflow skill builds on top of the same Paperzilla data access as the core `paperzilla` skill.
+
+- Some profiles use the `pz` CLI.
+- Some profiles use Paperzilla MCP.
+
+Read and follow any `AGENT.md` or other profile-specific files packaged with the current profile.
+
+## CLI reference
+
+When the current profile uses `pz`, these are the core commands.
 
 ### List projects
 ```bash
