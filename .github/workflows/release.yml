@@ -23,12 +23,39 @@ jobs:
       - name: Build distributable assets
         run: ./tools/build-distributions.sh
 
+      - name: Create latest alias assets
+        run: |
+          shopt -s nullglob
+          assets=(dist/*.zip dist/*.tar.gz)
+          for asset in "${assets[@]}"; do
+            name="$(basename "$asset")"
+            alias="$name"
+            case "$name" in
+              *.tar.gz)
+                stem="${name%.tar.gz}"
+                ext=".tar.gz"
+                ;;
+              *.zip)
+                stem="${name%.zip}"
+                ext=".zip"
+                ;;
+              *)
+                continue
+                ;;
+            esac
+            alias_stem="$(printf '%s' "$stem" | sed -E 's/-v[0-9][0-9A-Za-z._-]*$//')"
+            alias="${alias_stem}${ext}"
+            if [ "$alias" != "$name" ]; then
+              cp "$asset" "dist/$alias"
+            fi
+          done
+
       - name: Verify release assets
         run: |
           shopt -s nullglob
-          assets=(dist/*.zip)
+          assets=(dist/*.zip dist/*.tar.gz)
           if [ "${#assets[@]}" -eq 0 ]; then
-            echo "No ZIP assets were generated in dist/." >&2
+            echo "No release assets were generated in dist/." >&2
             exit 1
           fi
           printf 'Assets to publish:\n'
@@ -40,7 +67,7 @@ jobs:
           TAG: ${{ github.ref_name }}
         run: |
           shopt -s nullglob
-          assets=(dist/*.zip)
+          assets=(dist/*.zip dist/*.tar.gz)
 
           if gh release view "$TAG" >/dev/null 2>&1; then
             gh release upload "$TAG" "${assets[@]}" --clobber

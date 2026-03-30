@@ -190,8 +190,8 @@ Suggested fields:
 Distribution channels should not be top-level product concepts.
 
 - ClawHub is an install path for supported OpenClaw profiles.
-- GitHub release ZIPs are a delivery mechanism for packaged profiles.
-- Some profiles can remain source-only.
+- GitHub release assets are a delivery mechanism for packaged profiles.
+- Some profiles can ship as source bundles rather than packaged installs.
 
 The current outlier is the core `paperzilla` OpenClaw profile, which is published on ClawHub. That should be visible in install docs, but it should not change the skill taxonomy.
 
@@ -233,7 +233,7 @@ Target behavior:
 4. Regenerate `catalog/downloads.md`
 5. Optionally generate a machine-readable catalog for docs or release automation
 6. Optionally sync the repo-root `SKILL.md` for the published OpenClaw profile
-7. On tag push, publish packaged ZIP assets to a GitHub release
+7. On tag push, publish packaged release assets to a GitHub release
 
 Important policy:
 

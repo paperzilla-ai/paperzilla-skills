@@ -55,12 +55,12 @@ Rules of thumb:
 
 | Skill | Profile | Agent | Transport | Availability |
 |---|---|---|---|---|
-| `paperzilla` | `generic` | Generic | CLI (`pz`) | ZIP release asset |
-| `paperzilla` | `claude` | Claude | CLI (`pz`) | ZIP release asset |
-| `paperzilla` | `codex` | Codex | CLI (`pz`) | ZIP release asset |
-| `paperzilla` | `openclaw` | OpenClaw | CLI (`pz`) | Published on ClawHub |
-| `paperzilla-monitor` | `claude` | Claude | MCP | ZIP release asset |
-| `paperzilla-monitor` | `openclaw` | OpenClaw | CLI (`pz`) | Source-only profile in this repo |
+| `paperzilla` | `generic` | Generic | CLI (`pz`) | [Latest ZIP](https://github.com/paperzilla-ai/paperzilla-skills/releases/latest/download/paperzilla-generic.zip) |
+| `paperzilla` | `claude` | Claude | CLI (`pz`) | [Latest ZIP](https://github.com/paperzilla-ai/paperzilla-skills/releases/latest/download/paperzilla-claude.zip) |
+| `paperzilla` | `codex` | Codex | CLI (`pz`) | [Latest ZIP](https://github.com/paperzilla-ai/paperzilla-skills/releases/latest/download/paperzilla-codex.zip) |
+| `paperzilla` | `openclaw` | OpenClaw | CLI (`pz`) | [ClawHub](https://clawhub.ai/pors/paperzilla) |
+| `paperzilla-monitor` | `claude` | Claude | MCP | [Latest ZIP](https://github.com/paperzilla-ai/paperzilla-skills/releases/latest/download/paperzilla-monitor-claude-mcp.zip) |
+| `paperzilla-monitor` | `openclaw` | OpenClaw | CLI (`pz`) | [Latest source bundle](https://github.com/paperzilla-ai/paperzilla-skills/releases/latest/download/paperzilla-monitor-openclaw-source.tar.gz) |
 
 ## Install
 
@@ -82,7 +82,7 @@ Download packaged assets from the latest GitHub release:
 
 - https://github.com/paperzilla-ai/paperzilla-skills/releases/latest
 
-Release ZIP assets are built automatically and uploaded when a `v*` tag is pushed.
+Release assets are built automatically and uploaded when a `v*` tag is pushed.
 
 Detailed agent-specific setup and transport documentation should live in the docs repo rather than this README.
 

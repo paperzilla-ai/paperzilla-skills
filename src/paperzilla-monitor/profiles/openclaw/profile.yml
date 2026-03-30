@@ -2,5 +2,6 @@ id: openclaw
 agent: openclaw
 transport: cli
 package_type: source
+artifact_name: paperzilla-monitor-openclaw-source
 version: 0.2.1
-source_note: source-only profile in this repo
+source_note: Source bundle release asset; not published as a packaged install

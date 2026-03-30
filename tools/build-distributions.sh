@@ -6,6 +6,39 @@ SRC="$ROOT/src"
 DIST="$ROOT/dist"
 CATALOG="$ROOT/catalog"
 ROOT_SKILL="$ROOT/SKILL.md"
+REPO_WEB="https://github.com/paperzilla-ai/paperzilla-skills"
+
+asset_alias_name() {
+  local filename="$1"
+  local stem
+  local ext
+
+  case "$filename" in
+    *.tar.gz)
+      stem="${filename%.tar.gz}"
+      ext=".tar.gz"
+      ;;
+    *.zip)
+      stem="${filename%.zip}"
+      ext=".zip"
+      ;;
+    *)
+      printf '%s' "$filename"
+      return
+      ;;
+  esac
+
+  stem="$(printf '%s' "$stem" | sed -E 's/-v[0-9][0-9A-Za-z._-]*$//')"
+  printf '%s%s' "$stem" "$ext"
+}
+
+latest_asset_url() {
+  local filename="$1"
+  local alias_name
+
+  alias_name="$(asset_alias_name "$filename")"
+  printf '%s/releases/latest/download/%s' "$REPO_WEB" "$alias_name"
+}
 
 strip_quotes() {
   local value="$1"
@@ -202,7 +235,7 @@ for skill_dir in "$SRC"/*; do
           cd "$DIST/$skill_id/$profile_id"
           zip -qr "$zip_path" "$package_root"
         )
-        CATALOG_ROWS+=("| $skill_id | $profile_id | $agent | $transport | ZIP: [$zip_name](../dist/$zip_name) |")
+        CATALOG_ROWS+=("| $skill_id | $profile_id | $agent | $transport | [Latest ZIP]($(latest_asset_url "$zip_name")) |")
         ;;
       openclaw)
         if [ -z "$install_command" ]; then
@@ -212,10 +245,19 @@ for skill_dir in "$SRC"/*; do
         CATALOG_ROWS+=("| $skill_id | $profile_id | $agent | $transport | ClawHub: \`$install_command\` |")
         ;;
       source)
-        if [ -z "$source_note" ]; then
-          source_note="source-only profile in this repo"
+        source_name="$artifact_name.tar.gz"
+        if [ -n "$version" ]; then
+          source_name="$artifact_name-v$version.tar.gz"
         fi
-        CATALOG_ROWS+=("| $skill_id | $profile_id | $agent | $transport | $source_note |")
+        source_path="$DIST/$source_name"
+        (
+          cd "$DIST/$skill_id/$profile_id"
+          tar -czf "$source_path" "$package_root"
+        )
+        if [ -z "$source_note" ]; then
+          source_note="Source bundle"
+        fi
+        CATALOG_ROWS+=("| $skill_id | $profile_id | $agent | $transport | [$source_note]($(latest_asset_url "$source_name")) |")
         ;;
       *)
         echo "Unsupported package_type '$package_type' for $skill_id/$profile_id" >&2
