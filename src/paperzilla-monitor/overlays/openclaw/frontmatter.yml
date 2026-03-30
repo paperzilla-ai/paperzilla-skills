@@ -1,0 +1,9 @@
+name: paperzilla-monitor
+description: Monitor and triage Paperzilla project feeds via `pz` CLI inside OpenClaw. Use when users ask what is new, want relevance triage, deep-dive paper markdown summaries, or digest delivery to Telegram.
+version: 0.1.0
+metadata:
+  openclaw:
+    requires:
+      bins:
+        - pz
+    homepage: https://docs.paperzilla.ai/guides/cli

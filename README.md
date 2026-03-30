@@ -31,6 +31,7 @@ Download from the latest GitHub release assets:
 | Skill type | OpenClaw | Claude | Codex | Generic |
 |---|---|---|---|---|
 | `paperzilla-cli` | ClawHub package: `paperzilla` | ZIP: `paperzilla-cli-claude.zip` | ZIP: `paperzilla-cli-codex.zip` | ZIP: `paperzilla-cli-generic-vX.Y.Z.zip` |
+| `paperzilla-monitor` | OpenClaw source variant in repo (can be packaged) | ZIP: `paperzilla-monitor-claude.zip` | — | — |
 
 **Versioning:** the Generic ZIP version matches the OpenClaw skill version (example: `0.2.0`).
 
