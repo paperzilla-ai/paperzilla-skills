@@ -60,7 +60,7 @@ Rules of thumb:
 | `paperzilla` | `codex` | Codex | CLI (`pz`) | [Latest ZIP](https://github.com/paperzilla-ai/paperzilla-skills/releases/latest/download/paperzilla-codex.zip) |
 | `paperzilla` | `openclaw` | OpenClaw | CLI (`pz`) | [ClawHub](https://clawhub.ai/pors/paperzilla) |
 | `paperzilla-monitor` | `claude` | Claude | MCP | [Latest ZIP](https://github.com/paperzilla-ai/paperzilla-skills/releases/latest/download/paperzilla-monitor-claude-mcp.zip) |
-| `paperzilla-monitor` | `openclaw` | OpenClaw | CLI (`pz`) | [Latest source bundle](https://github.com/paperzilla-ai/paperzilla-skills/releases/latest/download/paperzilla-monitor-openclaw-source.tar.gz) |
+| `paperzilla-monitor` | `openclaw` | OpenClaw | CLI (`pz`) | [ClawHub](https://clawhub.ai/pors/paperzilla-research-monitor) |
 
 ## Install
 
@@ -73,6 +73,8 @@ clawhub install paperzilla
 ```
 
 Skill page: https://clawhub.ai/pors/paperzilla
+
+Paperzilla Monitor page: https://clawhub.ai/pors/paperzilla-research-monitor
 
 ClawHub is an install channel, not a separate skill type. The source of truth still lives in this repo.
 
