@@ -8,8 +8,8 @@ Start with the job you want your agent to do. Then choose a supported profile fo
 
 | If you want to... | Use this skill | What it is for |
 |---|---|---|
-| Chat with your agent about projects and papers in Paperzilla | `paperzilla` | The core Paperzilla skill. Ask for recent papers from a project, fetch a paper as markdown, get summaries, compare relevance to your research, inspect project feeds, export JSON, or get Atom feed URLs. This is the default starting point for most users. |
-| Run an opinionated monitoring workflow | `paperzilla-monitor` | A higher-level workflow skill built on top of Paperzilla access. It is for repeated feed triage, digest generation, and optional delivery to tools like Slack or Telegram in supported profiles. |
+| Chat with your agent about projects, recommendations, and papers in Paperzilla | `paperzilla` | The core Paperzilla skill. Ask for recent recommendations from a project, fetch a canonical paper as markdown, inspect a recommendation, leave recommendation feedback, export JSON, or get Atom feed URLs. This is the default starting point for most users. |
+| Run an opinionated research brief workflow | `paperzilla-monitor` | A higher-level workflow skill built on top of Paperzilla access. It is for on-demand paper discussion plus recurring weekday briefs in supported Slack or Telegram setups. |
 
 ## How to think about skills in this repo
 
@@ -49,7 +49,7 @@ Rules of thumb:
 | Skill | Category | Recommended for | Notes |
 |---|---|---|---|
 | `paperzilla` | Core access | Almost everyone | The default Paperzilla skill |
-| `paperzilla-monitor` | Workflow | Users who specifically want feed triage and digest delivery | An opinionated workflow built on top of Paperzilla access |
+| `paperzilla-monitor` | Workflow | Users who want on-demand paper discussion plus weekday briefs | An opinionated workflow built on top of Paperzilla access |
 
 ## Profiles available today
 

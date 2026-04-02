@@ -1,112 +1,174 @@
-# Paperzilla Research Monitor
+# Paperzilla research briefs
 
-Monitor and triage papers from Paperzilla projects using the Paperzilla access method provided by the current profile.
+Use this skill when the user wants one of these two workflows:
 
-## Scope
+- `on_demand_discussion`: discuss the latest papers from one Paperzilla project, inspect one paper, fetch markdown, summarize it, explain why it matters for "our work", and continue the discussion
+- `weekday_brief`: produce one concise weekday research brief for one Paperzilla project
 
-Use this skill when the user asks to:
-- check what is new in a project feed
-- triage papers by relevance to current focus
-- fetch full markdown for a specific paper
-- produce a concise digest and optionally deliver it externally
+This is a workflow skill built on top of the same Paperzilla access layer as the core `paperzilla` skill. It should feel opinionated and repeatable.
 
-## Prerequisites
+## What this skill needs
 
-- Use the Paperzilla transport required by the current profile.
-- For CLI profiles, `pz` must be installed and authenticated (`pz login`).
-- For MCP profiles, the Paperzilla MCP must be available to the agent.
+- One Paperzilla project
+- One short sentence for "our work" if that context is not already known
 
-## Access method
+If either is missing, ask once and then reuse it for the rest of the workflow.
 
-This workflow skill builds on top of the same Paperzilla data access as the core `paperzilla` skill.
+Examples:
 
-- Some profiles use the `pz` CLI.
-- Some profiles use Paperzilla MCP.
+- `Project: Agents evaluation`
+- `Our work: we build evaluation infrastructure for coding agents.`
 
-Read and follow any `AGENT.md` or other profile-specific files packaged with the current profile.
+## Transport rules
 
-## CLI reference
+Follow the transport required by the current profile.
 
-When the current profile uses `pz`, these are the core commands.
+### CLI profiles
 
-### List projects
+Use the Paperzilla CLI (`pz`).
+
+Core commands:
+
 ```bash
 pz project list
+pz project <project-id>
+pz feed <project-id> --limit 20 --json
+pz rec <project-paper-id> --json
+pz rec <project-paper-id> --markdown
+pz paper <paper-id> --json
+pz paper <paper-id> --markdown
+pz paper <paper-id> --project <project-id>
 ```
 
-### Project details
-```bash
-pz project <project_id>
-```
+Use `--json` whenever you need structured feed or metadata parsing.
 
-### Feed
-```bash
-pz feed <project_id> --limit 20
-pz feed <project_id> --limit 20 --json
-```
+Use `pz rec` for items from a project's feed. Use `pz paper` for canonical Paperzilla paper IDs.
 
-### Paper details
-```bash
-pz paper <paper_id_or_short_id>
-pz paper <paper_id_or_short_id> --json
-pz paper <paper_id_or_short_id> --markdown
-```
+CLI markdown behavior differs by command:
 
-If markdown is still processing, wait and retry.
+- `pz rec --markdown` can queue markdown generation and prints a friendly retry message when it is still being prepared
+- `pz paper --markdown` only returns markdown when it is already ready
 
-## Workflow
+### MCP profiles
 
-### 1) Identify project
+Use the Paperzilla MCP tools directly.
 
-1. Run `pz project list`.
-2. If user named a project, use that project.
-3. Otherwise ask once.
+Core tools:
 
-### 2) Establish current relevance context
+- `projects_list`
+- `projects_get`
+- `feed_get`
+- `paper_get`
+- `paper_markdown`
 
-Combine:
-- project focus from name/details
-- current conversation goals
-- user include/exclude constraints
+Preferred sequence:
 
-If context is unclear, ask one focused question.
+1. `projects_list` when the project is missing or ambiguous
+2. `projects_get` to confirm project identity when needed
+3. `feed_get` to pull the latest feed items
+4. `paper_get` for one paper's metadata
+5. `paper_markdown` for markdown-backed analysis
 
-### 3) Fetch feed
+Handle `paper_markdown` statuses correctly:
 
-Use JSON for triage:
-```bash
-pz feed <project_id> --limit 20 --json
-```
+- `ready`: use the markdown
+- `queued`: tell the user it is still being prepared and suggest retrying shortly
+- `unavailable`: report that markdown is not currently available
 
-### 4) Triage
+## Shared behavior rules
 
-Classify each item:
-- 🟢 Relevant — directly useful now
-- 🟡 Tangential — related but not core
-- 🔴 Irrelevant — off current focus
+- Treat Paperzilla relevance and ranking as a strong prior, not the final answer.
+- Use Paperzilla terms exactly: `project`, `feed`, `Must Read`, `Related`.
+- Name the exact paper or recommendation identifier you used when you inspect one paper.
+- Separate metadata from interpretation.
+- Explain relevance in terms of the user's actual work, not generic importance.
+- Do not dump full markdown unless the user explicitly asks for it.
 
-Use title + abstract as primary evidence. Treat ranking score as prior only.
+## Mode 1: on-demand discussion
 
-### 5) Present digest
+Use this mode when the user wants an interactive paper conversation in chat.
 
-Format for scanability:
-- group by 🟢 / 🟡 / 🔴
-- one-liner reason for 🟢 and 🟡
-- titles only for 🔴
+### Workflow
 
-### 6) Deep-dive on demand
+1. Resolve the project and the "our work" context.
+2. Pull the latest papers from that project's feed.
+3. Show a short list of the newest or strongest candidates.
+4. When the user picks one paper, return metadata first.
+5. Fetch markdown for that paper or recommendation.
+6. Summarize:
+   - contribution
+   - method
+   - results
+   - limits
+   - why it matters for our work
+7. Continue the discussion and make a recommendation such as:
+   - read now
+   - keep as Related
+   - ignore this week
 
-For selected paper:
-1. fetch markdown
-2. summarize: contribution, method, results, limitations, relevance to user context
-3. avoid dumping full markdown unless explicitly requested
+### Output contract
+
+For the first feed reply, include:
+
+- project name
+- the papers you checked
+- per paper: title, date, source, and whether it looks `Must Read` or `Related`
+
+For the metadata reply, include:
+
+- title
+- authors
+- publication date
+- source
+- URL
+- the exact Paperzilla paper ID or project-paper ID used
+
+For the markdown reply, include:
+
+- contribution
+- method
+- results
+- limits
+- why it matters for our work
+
+## Mode 2: weekday brief
+
+Use this mode when the user wants one concise recurring brief for one project.
+
+### Workflow
+
+1. Resolve the project and the "our work" context.
+2. Pull the newest papers from the feed.
+3. Select the papers worth mentioning.
+4. For each selected paper, give:
+   - one short summary
+   - one sentence on why it is relevant to our work
+5. If no new papers qualify, say that explicitly.
+
+### Output contract
+
+Every weekday brief should include:
+
+- project name
+- date
+- how many new papers were checked
+- for each selected paper:
+  - title
+  - one short summary
+  - one sentence on why it is relevant to our work
+- a clear `No new papers today.` line when nothing new qualifies
+
+Keep the brief concise and easy to scan.
 
 ## Edge cases
 
-- **No new papers:** confirm project active and report no fresh additions.
-- **Large feeds:** increase `--limit` or split in chunks.
-- **Markdown delay:** retry once after waiting; then report processing state.
+- **No project given:** ask once, then continue.
+- **No "our work" context:** ask once for one short sentence, then reuse it.
+- **No new papers:** report that clearly instead of padding the brief.
+- **Large feed:** use a sensible limit first, then expand only if needed.
+- **Markdown delay:** retry once when appropriate, then report the waiting state.
+- **Ambiguous paper ID:** fall back to the full UUID or clearly restate the paper you selected.
 
-## Agent-specific delivery rules
+## Agent-specific rules
 
-Read and follow `AGENT.md` in this skill root for channel/tool behavior and external reporting rules for the current agent target.
+Read and follow any packaged `AGENT.md` file for the current profile. The profile file defines the chat surface, delivery surface, and scheduling behavior.

@@ -1,6 +1,6 @@
 ---
 name: paperzilla
-description: Chat with your agent about projects and papers in Paperzilla. Use when users ask for recent papers from a project, want a paper as markdown, need a summary, want relevance to their research, inspect feeds, export JSON, or get Atom feed URLs.
+description: Chat with your agent about projects, recommendations, and canonical papers in Paperzilla. Use when users ask for recent project recommendations, canonical paper details, markdown-based summaries, recommendation feedback, feed export, or Atom feed URLs.
 version: 0.2.1
 metadata:
   openclaw:
@@ -12,15 +12,17 @@ metadata:
 
 # Paperzilla
 
-Use this skill when you want to chat with your agent about projects and papers in Paperzilla.
+Use this skill when you want to chat with your agent about projects, recommendations, and canonical papers in Paperzilla.
 
 ## What you can ask
 
-- "Give me the latest papers from project X."
-- "Fetch paper Y as markdown and summarize it."
+- "Give me the latest recommendations from project X."
+- "Open recommendation Y and explain why it matters."
+- "Fetch canonical paper Z as markdown and summarize it."
 - "Tell me how this paper is relevant to my research."
 - "Show me the feed for project X."
-- "Export this paper or feed as JSON."
+- "Leave feedback on a recommendation."
+- "Export this paper, recommendation, or feed as JSON."
 
 This is the core Paperzilla skill. It gives your agent direct access to Paperzilla data, but it does not impose a workflow or external delivery integration.
 
@@ -59,29 +61,22 @@ mv pz /usr/local/bin/
 
 ## Update
 
-### macOS
+Check whether your CLI is up to date and get install-specific upgrade steps:
+
 ```bash
-brew update
-brew upgrade pz
+pz update
 ```
 
-### Windows
+If detection is ambiguous, override it explicitly:
+
 ```bash
-scoop update pz
+pz update --install-method homebrew
+pz update --install-method scoop
+pz update --install-method release
+pz update --install-method source
 ```
 
-### Linux / Releases
-```bash
-curl -sL https://github.com/paperzilla-ai/pz/releases/latest/download/pz_linux_amd64.tar.gz | tar xz
-sudo mv pz /usr/local/bin/
-```
-
-### Source install
-```bash
-git pull
-go build -o pz .
-sudo mv pz /usr/local/bin/
-```
+Supported values are `auto`, `homebrew`, `scoop`, `release`, and `source`.
 
 ## Authentication
 
@@ -122,16 +117,40 @@ pz feed <project-id> --json
 pz feed <project-id> --atom
 ```
 
-### Inspect one paper/feed item
+Feed output can include existing recommendation feedback markers:
+
+- `[↑]` upvote
+- `[↓]` downvote
+- `[★]` star
+
+### Read a canonical paper
 ```bash
-pz paper <paper-or-feed-id>
-pz paper <paper-or-feed-id> --json
-pz paper <paper-or-feed-id> --markdown
+pz paper <paper-id>
+pz paper <paper-id> --json
+pz paper <paper-id> --markdown
+pz paper <paper-id> --project <project-id>
+```
+
+### Open a recommendation from one of your projects
+```bash
+pz rec <project-paper-id>
+pz rec <project-paper-id> --json
+pz rec <project-paper-id> --markdown
+```
+
+### Leave recommendation feedback
+```bash
+pz feedback <project-paper-id> upvote
+pz feedback <project-paper-id> star
+pz feedback <project-paper-id> downvote --reason not_relevant
+pz feedback clear <project-paper-id>
 ```
 
 ## Output and automation
 
 - Prefer `--json` for machine parsing.
+- `pz paper --markdown` only returns markdown when it is already prepared.
+- `pz rec --markdown` can queue markdown generation and prints a friendly retry message while it is still being prepared.
 - `--atom` returns a personal feed URL for feed readers.
 
 ## Configuration

@@ -1,6 +1,6 @@
 interface:
   display_name: "Paperzilla CLI"
-  short_description: "Use pz to browse projects, feeds, and paper details."
+  short_description: "Use pz to browse projects, recommendations, and canonical papers."
 
 policy:
   allow_implicit_invocation: true

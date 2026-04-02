@@ -2,9 +2,9 @@ id: paperzilla
 name: Paperzilla
 package_root: paperzilla
 category: core
-summary: Chat with your agent about projects and papers in Paperzilla.
+summary: Chat with your agent about projects, recommendations, and canonical papers in Paperzilla.
 frontmatter_name: paperzilla
-frontmatter_description: Chat with your agent about projects and papers in Paperzilla. Use when users ask for recent papers from a project, want a paper as markdown, need a summary, want relevance to their research, inspect feeds, export JSON, or get Atom feed URLs.
+frontmatter_description: Chat with your agent about projects, recommendations, and canonical papers in Paperzilla. Use when users ask for recent project recommendations, canonical paper details, markdown-based summaries, recommendation feedback, feed export, or Atom feed URLs.
 recommended_profile: generic
 profiles:
   - generic
