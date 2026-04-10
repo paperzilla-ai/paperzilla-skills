@@ -3,4 +3,4 @@ agent: generic
 transport: cli
 package_type: zip
 artifact_name: paperzilla-generic
-version: 0.2.1
+version: 0.2.2
