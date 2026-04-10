@@ -7,6 +7,7 @@ frontmatter_name: paperzilla-monitor
 frontmatter_description: Discuss the latest papers from one Paperzilla project and produce weekday research briefs. Use when users want recent papers, metadata, markdown-based summaries, why a paper matters for our work, or a recurring weekday brief.
 frontmatter_license: MIT
 frontmatter_skill_author: "Paperzilla Inc"
+recommended_profile: claude
 profiles:
   - claude
   - openclaw

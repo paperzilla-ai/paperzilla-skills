@@ -6,6 +6,7 @@ SRC="$ROOT/src"
 DIST="$ROOT/dist"
 CATALOG="$ROOT/catalog"
 AGENTSKILLS_EXPORT="$CATALOG/agentskills"
+ROOT_SKILLS_EXPORT="$ROOT/skills"
 ROOT_SKILL="$ROOT/SKILL.md"
 REPO_WEB="https://github.com/paperzilla-ai/paperzilla-skills"
 
@@ -136,7 +137,8 @@ emit_skill_markdown() {
 
 rm -rf "$DIST"
 rm -rf "$AGENTSKILLS_EXPORT"
-mkdir -p "$DIST" "$CATALOG" "$AGENTSKILLS_EXPORT"
+rm -rf "$ROOT_SKILLS_EXPORT"
+mkdir -p "$DIST" "$CATALOG" "$AGENTSKILLS_EXPORT" "$ROOT_SKILLS_EXPORT"
 
 declare -a CATALOG_ROWS=()
 
@@ -162,6 +164,7 @@ for skill_dir in "$SRC"/*; do
   frontmatter_description_default="$(yaml_get "$skill_manifest" "frontmatter_description")"
   frontmatter_license_default="$(yaml_get "$skill_manifest" "frontmatter_license")"
   frontmatter_skill_author_default="$(yaml_get "$skill_manifest" "frontmatter_skill_author")"
+  recommended_profile="$(yaml_get "$skill_manifest" "recommended_profile")"
 
   if [ -z "$skill_id" ]; then
     echo "Missing id in $skill_manifest" >&2
@@ -180,6 +183,10 @@ for skill_dir in "$SRC"/*; do
   if [ "${#profiles[@]}" -eq 0 ]; then
     echo "No profiles declared in $skill_manifest" >&2
     exit 1
+  fi
+
+  if [ -z "$recommended_profile" ]; then
+    recommended_profile="${profiles[0]}"
   fi
 
   for profile_name in "${profiles[@]}"; do
@@ -241,6 +248,12 @@ for skill_dir in "$SRC"/*; do
     export_dir="$AGENTSKILLS_EXPORT/$skill_id/$profile_id/$package_root"
     mkdir -p "$export_dir"
     cp -R "$out_dir/." "$export_dir/"
+
+    if [ "$profile_id" = "$recommended_profile" ] || [ "$profile_name" = "$recommended_profile" ]; then
+      root_export_dir="$ROOT_SKILLS_EXPORT/$package_root"
+      mkdir -p "$root_export_dir"
+      cp -R "$out_dir/." "$root_export_dir/"
+    fi
 
     if [ "$sync_repo_root_skill" = "true" ]; then
       cp "$out_dir/SKILL.md" "$ROOT_SKILL"

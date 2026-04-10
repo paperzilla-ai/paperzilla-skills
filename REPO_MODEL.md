@@ -119,6 +119,7 @@ Notes:
 - `base/BODY.md` contains the shared skill instructions for that skill.
 - `profiles/<id>/profile.yml` contains metadata for one supported profile.
 - `profiles/<id>/files/` contains profile-specific files such as agent manifests or install helpers.
+- `skills/<skill-id>/` at the repo root is a generated compatibility export for GitHub-importing ecosystems. It should contain one canonical profile per skill, chosen by `recommended_profile`.
 
 ## Manifest Schema
 
