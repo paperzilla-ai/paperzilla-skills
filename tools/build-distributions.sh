@@ -5,6 +5,7 @@ ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 SRC="$ROOT/src"
 DIST="$ROOT/dist"
 CATALOG="$ROOT/catalog"
+AGENTSKILLS_EXPORT="$CATALOG/agentskills"
 ROOT_SKILL="$ROOT/SKILL.md"
 REPO_WEB="https://github.com/paperzilla-ai/paperzilla-skills"
 
@@ -90,20 +91,29 @@ emit_skill_markdown() {
   local out_file="$1"
   local frontmatter_name="$2"
   local frontmatter_description="$3"
-  local version="$4"
-  local requires_bins="$5"
-  local homepage="$6"
-  local body_file="$7"
+  local license="$4"
+  local skill_author="$5"
+  local requires_bins="$6"
+  local homepage="$7"
+  local body_file="$8"
 
   {
     echo "---"
     echo "name: $frontmatter_name"
     echo "description: $frontmatter_description"
-    if [ -n "$version" ]; then
-      echo "version: $version"
+    if [ -n "$license" ]; then
+      echo "license: $license"
+    fi
+    if [ -n "$skill_author" ] || [ -n "$requires_bins" ] || [ -n "$homepage" ]; then
+      echo "metadata:"
+      if [ -n "$skill_author" ]; then
+        echo "  skill-author: \"$skill_author\""
+      fi
     fi
     if [ -n "$requires_bins" ] || [ -n "$homepage" ]; then
-      echo "metadata:"
+      if [ -z "$skill_author" ]; then
+        echo "metadata:"
+      fi
       echo "  openclaw:"
       if [ -n "$requires_bins" ]; then
         echo "    requires:"
@@ -125,7 +135,8 @@ emit_skill_markdown() {
 }
 
 rm -rf "$DIST"
-mkdir -p "$DIST" "$CATALOG"
+rm -rf "$AGENTSKILLS_EXPORT"
+mkdir -p "$DIST" "$CATALOG" "$AGENTSKILLS_EXPORT"
 
 declare -a CATALOG_ROWS=()
 
@@ -149,6 +160,8 @@ for skill_dir in "$SRC"/*; do
   package_root="$(yaml_get "$skill_manifest" "package_root")"
   frontmatter_name_default="$(yaml_get "$skill_manifest" "frontmatter_name")"
   frontmatter_description_default="$(yaml_get "$skill_manifest" "frontmatter_description")"
+  frontmatter_license_default="$(yaml_get "$skill_manifest" "frontmatter_license")"
+  frontmatter_skill_author_default="$(yaml_get "$skill_manifest" "frontmatter_skill_author")"
 
   if [ -z "$skill_id" ]; then
     echo "Missing id in $skill_manifest" >&2
@@ -191,12 +204,16 @@ for skill_dir in "$SRC"/*; do
     sync_repo_root_skill="$(yaml_get "$profile_manifest" "sync_repo_root_skill")"
     frontmatter_name="$(yaml_get "$profile_manifest" "frontmatter_name")"
     frontmatter_description="$(yaml_get "$profile_manifest" "frontmatter_description")"
+    frontmatter_license="$(yaml_get "$profile_manifest" "frontmatter_license")"
+    frontmatter_skill_author="$(yaml_get "$profile_manifest" "frontmatter_skill_author")"
 
     [ -z "$profile_id" ] && profile_id="$profile_name"
     [ -z "$package_type" ] && package_type="zip"
     [ -z "$artifact_name" ] && artifact_name="$skill_id-$profile_id"
     [ -z "$frontmatter_name" ] && frontmatter_name="$frontmatter_name_default"
     [ -z "$frontmatter_description" ] && frontmatter_description="$frontmatter_description_default"
+    [ -z "$frontmatter_license" ] && frontmatter_license="$frontmatter_license_default"
+    [ -z "$frontmatter_skill_author" ] && frontmatter_skill_author="$frontmatter_skill_author_default"
 
     out_dir="$DIST/$skill_id/$profile_id/$package_root"
     mkdir -p "$out_dir"
@@ -205,7 +222,8 @@ for skill_dir in "$SRC"/*; do
       "$out_dir/SKILL.md" \
       "$frontmatter_name" \
       "$frontmatter_description" \
-      "$version" \
+      "$frontmatter_license" \
+      "$frontmatter_skill_author" \
       "$requires_bins" \
       "$homepage" \
       "$body_file"
@@ -219,6 +237,10 @@ for skill_dir in "$SRC"/*; do
     if [ -d "$profile_dir/files" ]; then
       cp -R "$profile_dir/files/." "$out_dir/"
     fi
+
+    export_dir="$AGENTSKILLS_EXPORT/$skill_id/$profile_id/$package_root"
+    mkdir -p "$export_dir"
+    cp -R "$out_dir/." "$export_dir/"
 
     if [ "$sync_repo_root_skill" = "true" ]; then
       cp "$out_dir/SKILL.md" "$ROOT_SKILL"

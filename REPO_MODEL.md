@@ -136,6 +136,8 @@ category: core
 summary: Chat with your agent about projects and papers in Paperzilla.
 frontmatter_name: paperzilla
 frontmatter_description: Chat with your agent about projects and papers in Paperzilla.
+frontmatter_license: MIT
+frontmatter_skill_author: "Paperzilla Inc"
 recommended_profile: generic
 profiles:
   - generic
@@ -153,6 +155,8 @@ Suggested fields:
 - `summary`
 - `frontmatter_name`
 - `frontmatter_description`
+- `frontmatter_license`
+- `frontmatter_skill_author`
 - `recommended_profile`
 - `profiles`
 
