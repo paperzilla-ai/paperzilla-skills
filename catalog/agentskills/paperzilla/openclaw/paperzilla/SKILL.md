@@ -47,18 +47,14 @@ scoop install pz
 ```
 
 ### Linux
-```bash
-curl -sL https://github.com/paperzilla-ai/pz/releases/latest/download/pz_linux_amd64.tar.gz | tar xz
-sudo mv pz /usr/local/bin/
-```
+Use the official Linux install guide:
+
+- https://docs.paperzilla.ai/guides/cli-getting-started
 
 ### Build from source (Go 1.23+)
-```bash
-git clone https://github.com/paperzilla-ai/pz.git
-cd pz
-go build -o pz .
-mv pz /usr/local/bin/
-```
+See the CLI repository for source builds:
+
+- https://github.com/paperzilla-ai/pz
 
 ## Update
 
