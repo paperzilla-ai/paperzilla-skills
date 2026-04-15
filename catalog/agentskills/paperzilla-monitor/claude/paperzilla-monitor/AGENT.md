@@ -78,6 +78,11 @@ Default behavior:
 - produce one concise weekday brief for one project
 - draft the Slack post first unless the user explicitly asked for direct send
 - reuse the same project and "our work" context on every run
+- keep a persistent per-project history of the exact Paperzilla IDs already proposed in earlier weekday briefs
+- exclude previously proposed papers from later weekday briefs unless the user explicitly asked to revisit them
+- after drafting or sending the brief, update that history with the exact Paperzilla IDs included in the brief
+
+Persist that proposed-paper history in Cowork or another scheduler-owned state that survives to the next scheduled run.
 
 The weekday brief must include:
 

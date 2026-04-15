@@ -3,4 +3,4 @@ agent: codex
 transport: cli
 package_type: zip
 artifact_name: paperzilla-codex
-version: 0.2.2
+version: 0.2.3

@@ -66,6 +66,11 @@ Default behavior:
 - if the current run is a scheduled or external-send run, send the brief through the `message` tool to Telegram
 - if the brief is sent externally and no chat reply is needed, return `NO_REPLY`
 - if this is a user-initiated interactive run, keep the response in chat unless the user explicitly asked to send it elsewhere
+- keep a persistent per-project history of the exact Paperzilla IDs already proposed in earlier weekday briefs
+- exclude previously proposed papers from later weekday briefs unless the user explicitly asked to revisit them
+- after sending or drafting the brief, update that history with the exact Paperzilla IDs included in the brief
+
+Persist that proposed-paper history in the scheduling job state or another profile-owned memory surface that survives to the next run.
 
 The weekday brief must include:
 

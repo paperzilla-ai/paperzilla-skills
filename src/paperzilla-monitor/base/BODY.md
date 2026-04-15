@@ -138,12 +138,15 @@ Use this mode when the user wants one concise recurring brief for one project.
 ### Workflow
 
 1. Resolve the project and the "our work" context.
-2. Pull the newest papers from the feed.
-3. Select the papers worth mentioning.
-4. For each selected paper, give:
+2. Load the per-project history of papers already proposed in earlier weekday briefs.
+3. Pull the newest papers from the feed.
+4. Exclude papers that were already proposed in earlier weekday briefs unless the user explicitly asked to revisit them.
+5. Select the remaining papers worth mentioning.
+6. For each selected paper, give:
    - one short summary
    - one sentence on why it is relevant to our work
-5. If no new papers qualify, say that explicitly.
+7. After drafting or sending the brief, append the exact Paperzilla IDs used for the selected papers to that project's proposed-paper history.
+8. If no new papers qualify, say that explicitly.
 
 ### Output contract
 
@@ -160,10 +163,13 @@ Every weekday brief should include:
 
 Keep the brief concise and easy to scan.
 
+For recurring runs, the agent must keep a persistent per-project record of the exact Paperzilla IDs already proposed in earlier briefs. Do not propose the same paper again in a later recurring brief unless the user explicitly asked to revisit it.
+
 ## Edge cases
 
 - **No project given:** ask once, then continue.
 - **No "our work" context:** ask once for one short sentence, then reuse it.
+- **No prior brief history:** treat the run as the first brief for that project, initialize an empty proposed-paper history, and persist the papers selected this time.
 - **No new papers:** report that clearly instead of padding the brief.
 - **Large feed:** use a sensible limit first, then expand only if needed.
 - **Markdown delay:** retry once when appropriate, then report the waiting state.

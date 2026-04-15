@@ -3,4 +3,4 @@ agent: claude
 transport: mcp
 package_type: zip
 artifact_name: paperzilla-monitor-claude-mcp
-version: 0.2.2
+version: 0.2.3
