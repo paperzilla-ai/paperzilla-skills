@@ -1,7 +1,17 @@
 id: openclaw
 agent: openclaw
 transport: cli
-package_type: source
-artifact_name: paperzilla-monitor-openclaw-source
-version: 0.2.3
-source_note: Source bundle release asset; not published as a packaged install
+package_type: openclaw
+install_command: clawhub install paperzilla-research-monitor
+version: 1.1.4
+requires_bins: pz
+requires_config:
+  - Paperzilla CLI already authenticated locally
+  - OpenClaw message routing already configured by host
+homepage: https://docs.paperzilla.ai/guides/cli
+frontmatter_description: Monitor and discuss research papers from one Paperzilla project using the `pz` CLI inside OpenClaw. Use when users want recent papers, metadata, markdown-based summaries, why a paper matters for current work, a recurring weekday brief, or Paperzilla feed triage in chat.
+frontmatter_version: 1.1.4
+frontmatter_homepage: https://docs.paperzilla.ai/guides/cli
+frontmatter_allowed_tools:
+  - exec
+  - message

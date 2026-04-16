@@ -6,9 +6,8 @@ metadata:
   skill-author: "Paperzilla Inc"
   openclaw:
     requires:
-      bins:
-        - pz
-    homepage: https://docs.paperzilla.ai/guides/cli
+      bins: ["pz"]
+    homepage: "https://docs.paperzilla.ai/guides/cli"
 ---
 
 # Paperzilla

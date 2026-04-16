@@ -88,45 +88,109 @@ yaml_list() {
   done
 }
 
+trim_item() {
+  printf '%s' "$1" | sed 's/^[[:space:]]*//; s/[[:space:]]*$//'
+}
+
+emit_inline_identifier_array() {
+  local values="$1"
+  local first=1
+
+  printf '['
+  while IFS= read -r item; do
+    item="$(trim_item "$item")"
+    [ -z "$item" ] && continue
+    if [ "$first" -eq 0 ]; then
+      printf ', '
+    fi
+    printf '%s' "$item"
+    first=0
+  done <<< "$values"
+  printf ']'
+}
+
+emit_inline_string_array_from_csv() {
+  local values="$1"
+  local first=1
+  local item
+  local items=()
+
+  IFS=',' read -r -a items <<< "$values"
+
+  printf '['
+  for item in "${items[@]}"; do
+    item="$(trim_item "$item")"
+    [ -z "$item" ] && continue
+    if [ "$first" -eq 0 ]; then
+      printf ', '
+    fi
+    printf '"%s"' "$item"
+    first=0
+  done
+  printf ']'
+}
+
 emit_skill_markdown() {
   local out_file="$1"
   local frontmatter_name="$2"
   local frontmatter_description="$3"
-  local license="$4"
-  local skill_author="$5"
-  local requires_bins="$6"
-  local homepage="$7"
-  local body_file="$8"
+  local frontmatter_version="$4"
+  local frontmatter_homepage="$5"
+  local license="$6"
+  local frontmatter_allowed_tools="$7"
+  local skill_author="$8"
+  local requires_bins="$9"
+  local requires_config="${10}"
+  local homepage="${11}"
+  local body_file="${12}"
 
   {
     echo "---"
     echo "name: $frontmatter_name"
     echo "description: $frontmatter_description"
+    if [ -n "$frontmatter_version" ]; then
+      echo "version: $frontmatter_version"
+    fi
+    if [ -n "$frontmatter_homepage" ]; then
+      echo "homepage: $frontmatter_homepage"
+    fi
     if [ -n "$license" ]; then
       echo "license: $license"
     fi
-    if [ -n "$skill_author" ] || [ -n "$requires_bins" ] || [ -n "$homepage" ]; then
+    if [ -n "$frontmatter_allowed_tools" ]; then
+      printf 'allowed-tools: '
+      emit_inline_identifier_array "$frontmatter_allowed_tools"
+      echo
+    fi
+    if [ -n "$skill_author" ] || [ -n "$requires_bins" ] || [ -n "$requires_config" ] || [ -n "$homepage" ]; then
       echo "metadata:"
       if [ -n "$skill_author" ]; then
         echo "  skill-author: \"$skill_author\""
       fi
     fi
-    if [ -n "$requires_bins" ] || [ -n "$homepage" ]; then
+    if [ -n "$requires_bins" ] || [ -n "$requires_config" ] || [ -n "$homepage" ]; then
       if [ -z "$skill_author" ]; then
         echo "metadata:"
       fi
       echo "  openclaw:"
-      if [ -n "$requires_bins" ]; then
+      if [ -n "$requires_bins" ] || [ -n "$requires_config" ]; then
         echo "    requires:"
-        echo "      bins:"
-        IFS=',' read -r -a bins <<< "$requires_bins"
-        for bin in "${bins[@]}"; do
-          bin="$(echo "$bin" | sed 's/^[[:space:]]*//; s/[[:space:]]*$//')"
-          [ -n "$bin" ] && echo "        - $bin"
-        done
+      fi
+      if [ -n "$requires_bins" ]; then
+        printf '      bins: '
+        emit_inline_string_array_from_csv "$requires_bins"
+        echo
+      fi
+      if [ -n "$requires_config" ]; then
+        echo "      config:"
+        while IFS= read -r config_item; do
+          config_item="$(trim_item "$config_item")"
+          [ -z "$config_item" ] && continue
+          echo "        - \"$config_item\""
+        done <<< "$requires_config"
       fi
       if [ -n "$homepage" ]; then
-        echo "    homepage: $homepage"
+        echo "    homepage: \"$homepage\""
       fi
     fi
     echo "---"
@@ -162,8 +226,11 @@ for skill_dir in "$SRC"/*; do
   package_root="$(yaml_get "$skill_manifest" "package_root")"
   frontmatter_name_default="$(yaml_get "$skill_manifest" "frontmatter_name")"
   frontmatter_description_default="$(yaml_get "$skill_manifest" "frontmatter_description")"
+  frontmatter_version_default="$(yaml_get "$skill_manifest" "frontmatter_version")"
+  frontmatter_homepage_default="$(yaml_get "$skill_manifest" "frontmatter_homepage")"
   frontmatter_license_default="$(yaml_get "$skill_manifest" "frontmatter_license")"
   frontmatter_skill_author_default="$(yaml_get "$skill_manifest" "frontmatter_skill_author")"
+  frontmatter_allowed_tools_default="$(yaml_list "$skill_manifest" "frontmatter_allowed_tools")"
   recommended_profile="$(yaml_get "$skill_manifest" "recommended_profile")"
 
   if [ -z "$skill_id" ]; then
@@ -192,10 +259,15 @@ for skill_dir in "$SRC"/*; do
   for profile_name in "${profiles[@]}"; do
     profile_dir="$skill_dir/profiles/$profile_name"
     profile_manifest="$profile_dir/profile.yml"
+    profile_body_file="$body_file"
 
     if [ ! -f "$profile_manifest" ]; then
       echo "Missing profile.yml for $skill_id/$profile_name" >&2
       exit 1
+    fi
+
+    if [ -f "$profile_dir/BODY.md" ]; then
+      profile_body_file="$profile_dir/BODY.md"
     fi
 
     profile_id="$(yaml_get "$profile_manifest" "id")"
@@ -206,21 +278,28 @@ for skill_dir in "$SRC"/*; do
     version="$(yaml_get "$profile_manifest" "version")"
     install_command="$(yaml_get "$profile_manifest" "install_command")"
     requires_bins="$(yaml_get "$profile_manifest" "requires_bins")"
+    requires_config="$(yaml_list "$profile_manifest" "requires_config")"
     homepage="$(yaml_get "$profile_manifest" "homepage")"
     source_note="$(yaml_get "$profile_manifest" "source_note")"
     sync_repo_root_skill="$(yaml_get "$profile_manifest" "sync_repo_root_skill")"
     frontmatter_name="$(yaml_get "$profile_manifest" "frontmatter_name")"
     frontmatter_description="$(yaml_get "$profile_manifest" "frontmatter_description")"
+    frontmatter_version="$(yaml_get "$profile_manifest" "frontmatter_version")"
+    frontmatter_homepage="$(yaml_get "$profile_manifest" "frontmatter_homepage")"
     frontmatter_license="$(yaml_get "$profile_manifest" "frontmatter_license")"
     frontmatter_skill_author="$(yaml_get "$profile_manifest" "frontmatter_skill_author")"
+    frontmatter_allowed_tools="$(yaml_list "$profile_manifest" "frontmatter_allowed_tools")"
 
     [ -z "$profile_id" ] && profile_id="$profile_name"
     [ -z "$package_type" ] && package_type="zip"
     [ -z "$artifact_name" ] && artifact_name="$skill_id-$profile_id"
     [ -z "$frontmatter_name" ] && frontmatter_name="$frontmatter_name_default"
     [ -z "$frontmatter_description" ] && frontmatter_description="$frontmatter_description_default"
+    [ -z "$frontmatter_version" ] && frontmatter_version="$frontmatter_version_default"
+    [ -z "$frontmatter_homepage" ] && frontmatter_homepage="$frontmatter_homepage_default"
     [ -z "$frontmatter_license" ] && frontmatter_license="$frontmatter_license_default"
     [ -z "$frontmatter_skill_author" ] && frontmatter_skill_author="$frontmatter_skill_author_default"
+    [ -z "$frontmatter_allowed_tools" ] && frontmatter_allowed_tools="$frontmatter_allowed_tools_default"
 
     out_dir="$DIST/$skill_id/$profile_id/$package_root"
     mkdir -p "$out_dir"
@@ -229,11 +308,15 @@ for skill_dir in "$SRC"/*; do
       "$out_dir/SKILL.md" \
       "$frontmatter_name" \
       "$frontmatter_description" \
+      "$frontmatter_version" \
+      "$frontmatter_homepage" \
       "$frontmatter_license" \
+      "$frontmatter_allowed_tools" \
       "$frontmatter_skill_author" \
       "$requires_bins" \
+      "$requires_config" \
       "$homepage" \
-      "$body_file"
+      "$profile_body_file"
 
     for folder in references scripts assets; do
       if [ -d "$skill_dir/base/$folder" ]; then

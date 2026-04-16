@@ -1,21 +1,3 @@
----
-name: paperzilla-monitor
-description: Monitor and discuss research papers from one Paperzilla project using the `pz` CLI inside OpenClaw. Use when users want recent papers, metadata, markdown-based summaries, why a paper matters for current work, a recurring weekday brief, or Paperzilla feed triage in chat.
-version: 1.1.4
-homepage: https://docs.paperzilla.ai/guides/cli
-license: MIT
-allowed-tools: [exec, message]
-metadata:
-  skill-author: "Paperzilla Inc"
-  openclaw:
-    requires:
-      bins: ["pz"]
-      config:
-        - "Paperzilla CLI already authenticated locally"
-        - "OpenClaw message routing already configured by host"
-    homepage: "https://docs.paperzilla.ai/guides/cli"
----
-
 # Paperzilla research briefs
 
 Use this skill when the user wants one of these two workflows:

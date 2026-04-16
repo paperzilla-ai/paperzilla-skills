@@ -13,7 +13,7 @@ Use this profile for:
 ## Tooling
 
 - Use OpenClaw `exec` for Paperzilla CLI calls
-- Use OpenClaw `message` for Telegram delivery when you need to send externally
+- Use OpenClaw `message` for Telegram delivery when this profile needs external delivery or when the user explicitly asks to send elsewhere
 - Do not require MCP integrations for this profile
 
 Use the Paperzilla CLI directly:
@@ -22,9 +22,16 @@ Use the Paperzilla CLI directly:
 pz project list
 pz project <project-id>
 pz feed <project-id> --limit 20 --json
-pz paper <paper-id-or-feed-id> --json
-pz paper <paper-id-or-feed-id> --markdown
+pz rec <project-paper-id> --json
+pz rec <project-paper-id> --markdown
+pz paper <paper-id> --json
+pz paper <paper-id> --markdown
 ```
+
+Keep the object model straight:
+
+- use `pz rec ...` for recommendation IDs returned by `pz feed --json`
+- use `pz paper ...` for canonical paper IDs
 
 If "our work" is missing, ask once for one sentence and then reuse it.
 
@@ -54,7 +61,7 @@ When discussing one paper, include:
 - limits
 - why it matters for our work
 
-If markdown is still being prepared, say so and suggest retrying shortly.
+If markdown is still being prepared, say so, retry shortly, and prefer `pz rec --markdown` before any fallback when the paper came from a feed item.
 
 ## Mode: weekday brief
 
@@ -97,3 +104,10 @@ If no new papers qualify:
 [Date]
 
 No new papers today.
+
+## Delivery guardrails
+
+- For scheduled weekday brief runs, this profile may send externally via `message`.
+- For normal interactive runs, keep the output in chat unless the user explicitly asked for external delivery.
+- If destination is ambiguous, confirm once before sending.
+- Do not send proactive nudges, automatic follow-ups, or unrelated summaries under this profile.

@@ -1,6 +1,6 @@
 ---
 name: paperzilla-monitor
-description: Discuss the latest papers from one Paperzilla project and produce weekday research briefs. Use when users want recent papers, metadata, markdown-based summaries, why a paper matters for our work, or a recurring weekday brief.
+description: Discuss and triage papers from one Paperzilla project and produce weekday research briefs. Use when users want recent papers, metadata, markdown-based summaries, why a paper matters for current work, feed triage in chat, or a recurring weekday brief.
 license: MIT
 metadata:
   skill-author: "Paperzilla Inc"
@@ -46,11 +46,21 @@ pz rec <project-paper-id> --markdown
 pz paper <paper-id> --json
 pz paper <paper-id> --markdown
 pz paper <paper-id> --project <project-id>
+pz feedback <project-paper-id> upvote
+pz feedback <project-paper-id> star
+pz feedback <project-paper-id> downvote --reason not_relevant
+pz feedback <project-paper-id> downvote --reason low_quality
+pz feedback clear <project-paper-id>
 ```
 
 Use `--json` whenever you need structured feed or metadata parsing.
 
-Use `pz rec` for items from a project's feed. Use `pz paper` for canonical Paperzilla paper IDs.
+Keep the Paperzilla object model straight:
+- `pz paper <paper-ref>` = canonical paper
+- `pz rec <project-paper-ref>` = recommendation inside one project
+- `pz feedback <project-paper-ref> ...` = project-specific feedback on that recommendation
+
+When an item comes from `pz feed --json`, prefer `pz rec` and `pz feedback` over `pz paper`.
 
 CLI markdown behavior differs by command:
 
@@ -91,6 +101,7 @@ Handle `paper_markdown` statuses correctly:
 - Separate metadata from interpretation.
 - Explain relevance in terms of the user's actual work, not generic importance.
 - Do not dump full markdown unless the user explicitly asks for it.
+- Do not switch to arXiv HTML/abs links as the default fallback when the request was specifically for Paperzilla markdown.
 
 ## Mode 1: on-demand discussion
 
@@ -180,8 +191,9 @@ For recurring runs, the agent must keep a persistent per-project record of the e
 - **No prior brief history:** treat the run as the first brief for that project, initialize an empty proposed-paper history, and persist the papers selected this time.
 - **No new papers:** report that clearly instead of padding the brief.
 - **Large feed:** use a sensible limit first, then expand only if needed.
-- **Markdown delay:** retry once when appropriate, then report the waiting state.
+- **Markdown delay:** retry more than once when the user explicitly asked for markdown. Prefer a short polling loop over an immediate fallback.
 - **Ambiguous paper ID:** fall back to the full UUID or clearly restate the paper you selected.
+- **Canonical vs recommendation confusion:** if an ID came from `pz feed --json`, assume it is a recommendation ID unless shown otherwise.
 
 ## Agent-specific rules
 
