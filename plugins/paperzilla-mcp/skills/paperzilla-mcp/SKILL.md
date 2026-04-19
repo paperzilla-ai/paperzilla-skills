@@ -20,9 +20,19 @@ Use this skill when you need live Paperzilla data in Codex through the bundled `
 
 ## Default behavior
 
+- Before doing any Paperzilla task, use only the bundled `paperzilla` MCP server.
 - Prefer the `paperzilla` MCP server over the `pz` CLI.
 - Do not fall back to `pz` unless the user explicitly asks for the CLI path.
+- Never substitute other connectors or apps for Paperzilla. Do not use Stripe, Gmail, GitHub, or any other unrelated tool to answer a Paperzilla request.
 - Keep both the project feed item ID and the canonical `paper.id` when feed results include both.
+
+## Authentication and availability
+
+- If the `paperzilla` tools are unavailable, unauthenticated, or return an auth/startup error, stop and tell the user that Paperzilla MCP is not ready.
+- In that case, do not keep searching for "connector methods" or explore unrelated tools.
+- Tell the user to check the `paperzilla-mcp` plugin install state and complete Codex auth or MCP setup with a valid **Paperzilla MCP API key**.
+- If the plugin appears installed but Paperzilla tools still do not work, tell the user to reopen the plugin or MCP settings and re-enter the key.
+- Once Paperzilla MCP is available, resume the normal tool flow below.
 
 ## Tool flow
 

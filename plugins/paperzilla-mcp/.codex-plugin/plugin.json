@@ -1,6 +1,6 @@
 {
   "name": "paperzilla-mcp",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Use Paperzilla projects, feeds, and paper markdown in Codex through the Paperzilla MCP endpoint.",
   "author": {
     "name": "Paperzilla Inc",

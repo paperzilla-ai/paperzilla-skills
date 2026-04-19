@@ -100,6 +100,12 @@ Start a new thread and use prompts such as:
 - `Search this Paperzilla project for papers about retrieval evaluation.`
 - `Fetch this Paperzilla paper as markdown and summarize it.`
 
+## Troubleshooting
+
+- If Codex starts talking about "connector methods" or uses unrelated tools, Paperzilla MCP is not actually available yet.
+- In that case, do not trust the result. Reopen the `paperzilla-mcp` plugin or Codex MCP settings and complete auth with a valid **Paperzilla MCP API key**.
+- If you previously had Paperzilla configured in `~/.codex/config.toml`, Codex may have been reusing that old MCP setup instead of proving the plugin auth path.
+
 ## Docs and keys
 
 - Codex guide: `https://docs.paperzilla.ai/guides/codex`
