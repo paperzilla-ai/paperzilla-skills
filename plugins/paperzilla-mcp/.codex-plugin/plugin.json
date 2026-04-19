@@ -1,0 +1,45 @@
+{
+  "name": "paperzilla-mcp",
+  "version": "0.1.0",
+  "description": "Use Paperzilla projects, feeds, and paper markdown in Codex through the Paperzilla MCP endpoint.",
+  "author": {
+    "name": "Paperzilla Inc",
+    "email": "hello@paperzilla.ai",
+    "url": "https://paperzilla.ai/"
+  },
+  "homepage": "https://docs.paperzilla.ai/guides/codex",
+  "repository": "https://github.com/paperzilla-ai/paperzilla-skills",
+  "license": "MIT",
+  "keywords": [
+    "paperzilla",
+    "research",
+    "mcp",
+    "papers",
+    "codex"
+  ],
+  "skills": "./skills/",
+  "mcpServers": "./.mcp.json",
+  "interface": {
+    "displayName": "Paperzilla MCP",
+    "shortDescription": "Browse Paperzilla projects and papers in Codex",
+    "longDescription": "Install Paperzilla MCP in Codex to list projects, browse or search project feeds, inspect paper metadata, and fetch paper markdown. The plugin bundles the Paperzilla MCP endpoint plus a Codex skill that teaches the right tool flow for Paperzilla research tasks.",
+    "developerName": "Paperzilla",
+    "category": "Productivity",
+    "capabilities": [
+      "Interactive",
+      "Read"
+    ],
+    "websiteURL": "https://paperzilla.ai/",
+    "privacyPolicyURL": "https://paperzilla.ai/privacy",
+    "termsOfServiceURL": "https://paperzilla.ai/terms",
+    "defaultPrompt": [
+      "List my Paperzilla projects and open one feed.",
+      "Search this Paperzilla project for retrieval evaluation papers.",
+      "Fetch this Paperzilla paper as markdown and summarize it."
+    ],
+    "brandColor": "#5A8F32",
+    "composerIcon": "./assets/paperzilla-logo.png",
+    "logo": "./assets/paperzilla-logo.png",
+    "screenshots": []
+  }
+}
