@@ -10,9 +10,11 @@ Use this skill when you need live Paperzilla data in Codex through the bundled `
 ## Setup assumptions
 
 - The user installs the `paperzilla-mcp` plugin from Codex Plugins.
-- The plugin bundles the Paperzilla MCP endpoint at `https://paperzilla.ai/api/mcp`.
-- During install or plugin setup, the user should provide a **Paperzilla MCP API key** from the Paperzilla dashboard.
-- If the plugin is installed but auth is missing or invalid, tell the user to reopen the plugin settings or reinstall the plugin with a fresh key.
+- The plugin bundles the Paperzilla MCP endpoint declaration at `https://paperzilla.ai/api/mcp`.
+- Current Codex plugin installs do not prompt for Paperzilla API-key auth for non-OAuth MCP servers.
+- Live access requires a `paperzilla` MCP entry. The normal user path is Codex **Settings** > **Integrations & MCP** with `https://paperzilla.ai/api/mcp/?key=<Paperzilla MCP API key>`.
+- Advanced users can also configure `http_headers` in Codex MCP config.
+- If the plugin is installed but the `paperzilla` MCP server is missing, unauthenticated, or not exposing tools, tell the user to add Paperzilla in Codex **Integrations & MCP** instead of reinstalling the skill alone.
 - Setup docs:
   - `https://docs.paperzilla.ai/guides/codex`
   - `https://docs.paperzilla.ai/guides/mcp`
@@ -30,8 +32,10 @@ Use this skill when you need live Paperzilla data in Codex through the bundled `
 
 - If the `paperzilla` tools are unavailable, unauthenticated, or return an auth/startup error, stop and tell the user that Paperzilla MCP is not ready.
 - In that case, do not keep searching for "connector methods" or explore unrelated tools.
-- Tell the user to check the `paperzilla-mcp` plugin install state and complete Codex auth or MCP setup with a valid **Paperzilla MCP API key**.
-- If the plugin appears installed but Paperzilla tools still do not work, tell the user to reopen the plugin or MCP settings and re-enter the key.
+- Tell the user to check that Codex **Integrations & MCP** contains a `paperzilla` server with a valid **Paperzilla MCP API key**.
+- If `/mcp paperzilla` shows `Auth unsupported` and `Enabled`, explain that `Auth unsupported` can be normal for static API-key auth because Codex only supports interactive auth for OAuth-style MCP servers.
+- If the plugin appears installed but Paperzilla tools still do not work, tell the user that the plugin skill is present but the live MCP server is not authenticated yet.
+- Point them to the Codex guide for the GUI setup or the advanced `http_headers` config block.
 - Once Paperzilla MCP is available, resume the normal tool flow below.
 
 ## Tool flow

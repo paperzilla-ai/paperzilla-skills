@@ -1,32 +1,43 @@
 # Paperzilla MCP plugin
 
-`paperzilla-mcp` is a Codex plugin that bundles the Paperzilla MCP endpoint and a Codex skill for Paperzilla research workflows.
+`paperzilla-mcp` is a Codex plugin that bundles the Paperzilla MCP endpoint declaration and a Codex skill for Paperzilla research workflows.
 
-Today, the customer-facing install path is repo-based, not public-directory-based. A customer can clone or download this repo, then install the plugin from a repo or personal marketplace inside Codex.
+The customer-facing MCP setup should use Codex **Settings** > **Integrations & MCP**, not this local plugin installer. In Codex settings, users can add Paperzilla as a custom MCP server with this URL:
+
+```txt
+https://paperzilla.ai/api/mcp/?key=pzmcp_...
+```
+
+Replace `pzmcp_...` with a real **Paperzilla MCP API key** from the Paperzilla dashboard.
+
+Important current limitation: Codex plugin install does not prompt for API keys for non-OAuth MCP servers. Paperzilla uses an **MCP API key**, so this plugin is not the best customer setup path today. Keep the plugin for local testing and for a future OpenAI public Plugin Directory release.
 
 ## What this plugin includes
 
-- [`.mcp.json`](./.mcp.json) registers the `paperzilla` MCP server.
+- [`.mcp.json`](./.mcp.json) declares the `paperzilla` MCP server endpoint.
 - [`skills/paperzilla-mcp/SKILL.md`](./skills/paperzilla-mcp/SKILL.md) teaches Codex the Paperzilla MCP tool flow.
 - [`../../.agents/plugins/marketplace.json`](../../.agents/plugins/marketplace.json) makes the plugin discoverable for this repo workspace.
 
 ## Current customer UX
 
-Codex does not currently document direct plugin install from a GitHub URL.
-
 The current Paperzilla customer flow is:
 
-1. Clone or download this repo.
-2. Either:
-   - open the repo in Codex and install from the repo marketplace, or
-   - run the personal installer script below to make the plugin available across workspaces
-3. Open **Plugins** in Codex.
-4. Select the **Paperzilla** marketplace.
-5. Install `paperzilla-mcp`.
-6. Complete any Codex auth or setup prompt with your **Paperzilla MCP API key**.
-7. Start a new thread and ask Codex to use Paperzilla.
+1. Open Codex **Settings**.
+2. Open **Integrations & MCP**.
+3. Add a custom MCP server.
+4. Use `paperzilla` as the server name.
+5. Select **Streamable HTTP**.
+6. Paste `https://paperzilla.ai/api/mcp/?key=pzmcp_...` as the MCP server URL.
+7. Click **Save**.
+8. Start a new thread and ask Codex to use Paperzilla.
 
-This is the current GitHub-backed flow. It still depends on local files after clone or download.
+No `pz` install, no shell script, and no local plugin install are required.
+
+## Local plugin testing
+
+Codex does not currently document direct plugin install from a GitHub URL.
+
+There is no Paperzilla API-key prompt in the current Codex plugin install flow. If Codex does show an auth flow for a plugin MCP server, that is for OAuth-style MCP auth, not the Paperzilla MCP API key.
 
 ## Install for this workspace
 
@@ -37,14 +48,22 @@ Use this path when you want the plugin available only inside this repo workspace
 3. Open **Plugins** in Codex.
 4. Select the **Paperzilla** marketplace.
 5. Install `paperzilla-mcp`.
-6. Complete any Codex auth or setup prompt with your **Paperzilla MCP API key**.
-7. Start a new thread and ask Codex to use Paperzilla.
+6. Add this block to `~/.codex/config.toml` or a trusted project `.codex/config.toml`:
+
+```toml
+[mcp_servers.paperzilla]
+url = "https://paperzilla.ai/api/mcp"
+http_headers = { Authorization = "Bearer pzmcp_..." }
+```
+
+7. Replace `pzmcp_...` with your real **Paperzilla MCP API key** from the Paperzilla dashboard.
+8. Restart Codex and start a new thread.
 
 ## Install for your user account
 
-Use this path when you want the plugin available across workspaces without keeping the repo open as the active workspace.
+Use this path only for local testing or internal team packaging when you want the plugin available across workspaces without keeping the repo open as the active workspace.
 
-1. Run the installer script from this plugin directory:
+1. Run the installer script from this plugin directory and enter your **Paperzilla MCP API key** when prompted:
 
 ```bash
 ./scripts/install-personal.sh
@@ -56,10 +75,18 @@ Or point it at another local copy of the plugin:
 ./scripts/install-personal.sh /absolute/path/to/paperzilla-skills/plugins/paperzilla-mcp
 ```
 
+For non-interactive testing, pass the key explicitly:
+
+```bash
+./scripts/install-personal.sh --api-key pzmcp_...
+```
+
 The script:
 
 - symlinks the plugin into `~/.codex/plugins/paperzilla-mcp`
 - creates or updates `~/.agents/plugins/marketplace.json`
+- writes the `paperzilla` MCP server config into `~/.codex/config.toml` when you provide a key
+- backs up an existing `~/.codex/config.toml` before changing it
 - preserves any existing marketplace metadata and other plugin entries
 
 The marketplace entry it writes looks like this:
@@ -75,11 +102,11 @@ The marketplace entry it writes looks like this:
       "name": "paperzilla-mcp",
       "source": {
         "source": "local",
-        "path": "./plugins/paperzilla-mcp"
+        "path": "./.codex/plugins/paperzilla-mcp"
       },
       "policy": {
         "installation": "AVAILABLE",
-        "authentication": "ON_INSTALL"
+        "authentication": "ON_USE"
       },
       "category": "Productivity"
     }
@@ -87,9 +114,17 @@ The marketplace entry it writes looks like this:
 }
 ```
 
+The MCP config block it writes looks like this:
+
+```toml
+[mcp_servers.paperzilla]
+url = "https://paperzilla.ai/api/mcp"
+http_headers = { Authorization = "Bearer pzmcp_..." }
+```
+
 2. Restart Codex.
 3. Open **Plugins**, select **Paperzilla**, and install `paperzilla-mcp`.
-4. Complete any Codex auth or setup prompt with your **Paperzilla MCP API key**.
+4. Start a new thread and ask Codex to use Paperzilla.
 
 ## Use after install
 
@@ -103,8 +138,10 @@ Start a new thread and use prompts such as:
 ## Troubleshooting
 
 - If Codex starts talking about "connector methods" or uses unrelated tools, Paperzilla MCP is not actually available yet.
-- In that case, do not trust the result. Reopen the `paperzilla-mcp` plugin or Codex MCP settings and complete auth with a valid **Paperzilla MCP API key**.
-- If you previously had Paperzilla configured in `~/.codex/config.toml`, Codex may have been reusing that old MCP setup instead of proving the plugin auth path.
+- If the plugin is installed but `paperzilla` does not appear in `/mcp`, add Paperzilla through Codex **Settings** > **Integrations & MCP** or check `~/.codex/config.toml` for the `paperzilla` MCP block above.
+- If `/mcp paperzilla` shows `Auth unsupported` and `Enabled`, that can be normal for static API-key auth. Codex uses that label for unsupported interactive OAuth login, not as proof that the key is missing.
+- If `paperzilla` appears but auth fails, regenerate your **Paperzilla MCP API key** in the dashboard and update the custom MCP URL in Codex **Integrations & MCP**. For local plugin testing, you can also rerun `./scripts/install-personal.sh`.
+- If you installed only from the repo marketplace, remember that repo marketplace install gives Codex the plugin and skill, but it does not write your Paperzilla API key into Codex MCP config.
 
 ## Docs and keys
 
@@ -114,6 +151,6 @@ Start a new thread and use prompts such as:
 
 ## Current publishing status
 
-This plugin is ready for local and team marketplaces today.
+This plugin is ready for local and team marketplace testing today.
 
 Official public Plugin Directory publishing for Codex is still gated by OpenAI's self-serve plugin publishing rollout, so this repo ships the local marketplace path first.

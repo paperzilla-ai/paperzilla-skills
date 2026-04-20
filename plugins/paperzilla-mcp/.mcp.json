@@ -2,11 +2,7 @@
   "mcpServers": {
     "paperzilla": {
       "type": "http",
-      "url": "https://paperzilla.ai/api/mcp",
-      "headers": {
-        "Authorization": "Bearer ${PAPERZILLA_MCP_API_KEY}"
-      },
-      "note": "Create your Paperzilla MCP API key from the Paperzilla dashboard."
+      "url": "https://paperzilla.ai/api/mcp"
     }
   }
 }

@@ -1,6 +1,6 @@
 {
   "name": "paperzilla-mcp",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Use Paperzilla projects, feeds, and paper markdown in Codex through the Paperzilla MCP endpoint.",
   "author": {
     "name": "Paperzilla Inc",
@@ -22,7 +22,7 @@
   "interface": {
     "displayName": "Paperzilla MCP",
     "shortDescription": "Browse Paperzilla projects and papers in Codex",
-    "longDescription": "Install Paperzilla MCP in Codex to list projects, browse or search project feeds, inspect paper metadata, and fetch paper markdown. The plugin bundles the Paperzilla MCP endpoint plus a Codex skill that teaches the right tool flow for Paperzilla research tasks.",
+    "longDescription": "Install Paperzilla MCP in Codex to list projects, browse or search project feeds, inspect paper metadata, and fetch paper markdown. The plugin bundles the Paperzilla MCP endpoint declaration plus a Codex skill that teaches the right tool flow. Configure your Paperzilla MCP API key in Codex MCP config or with the bundled installer.",
     "developerName": "Paperzilla",
     "category": "Productivity",
     "capabilities": [
