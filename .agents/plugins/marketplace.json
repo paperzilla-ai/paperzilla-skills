@@ -3,18 +3,5 @@
   "interface": {
     "displayName": "Paperzilla"
   },
-  "plugins": [
-    {
-      "name": "paperzilla-mcp",
-      "source": {
-        "source": "local",
-        "path": "./plugins/paperzilla-mcp"
-      },
-      "policy": {
-        "installation": "AVAILABLE",
-        "authentication": "ON_USE"
-      },
-      "category": "Productivity"
-    }
-  ]
+  "plugins": []
 }

@@ -1,6 +1,6 @@
 # Paperzilla Skills
 
-This repo is the source for Paperzilla-related agent skills and local Codex plugin packaging.
+This repo is the source for Paperzilla agent skills and workflow packages.
 
 Start with the job you want your agent to do. Then choose a supported profile for your agent and setup.
 
@@ -62,15 +62,11 @@ Rules of thumb:
 | `paperzilla-monitor` | `claude` | Claude | MCP | [Latest ZIP](https://github.com/paperzilla-ai/paperzilla-skills/releases/latest/download/paperzilla-monitor-claude-mcp.zip) |
 | `paperzilla-monitor` | `openclaw` | OpenClaw | CLI (`pz`) | [ClawHub](https://clawhub.ai/pors/paperzilla-research-monitor) |
 
-## Codex plugin
+## Paperzilla MCP
 
-This repo also includes a local Codex plugin for the Paperzilla MCP path:
+Connect your AI client using the [current Paperzilla MCP setup guide](https://docs.paperzilla.ai/guides/mcp). For Codex, follow the [Codex setup guide](https://docs.paperzilla.ai/guides/codex).
 
-- [`plugins/paperzilla-mcp`](./plugins/paperzilla-mcp)
-
-It bundles the Paperzilla MCP endpoint plus a Codex skill so users can install one plugin instead of setting up Codex MCP and skill files separately.
-
-For the current repo-clone and personal-install flows, see [`plugins/paperzilla-mcp/README.md`](./plugins/paperzilla-mcp/README.md).
+If you installed the retired local Codex bundle, follow its [migration instructions](./plugins/paperzilla-mcp/README.md).
 
 ## Install
 
@@ -97,8 +93,6 @@ Download packaged assets from the latest GitHub release:
 Release assets are built automatically and uploaded when a `v*` tag is pushed.
 
 Detailed agent-specific setup and transport documentation should live in the docs repo rather than this README.
-
-For the local Codex plugin install flow, see [`plugins/paperzilla-mcp/README.md`](./plugins/paperzilla-mcp/README.md).
 
 ## GitHub import path
 
